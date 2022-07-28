@@ -6,7 +6,7 @@ const todoListItem = (obj) => {
     dueDate: obj.dueDate,
     priority: obj.priority,
     ...(obj.type == "Note" && { desc: obj.desc }),
-    ...(obj.completed == "Note" && { completed: obj.completed || false }),
+    ...(obj.type == "Note" && { completed: obj.completed || false }),
   };
 };
 
