@@ -1,6 +1,7 @@
 import todoList from "./todoList/todoList";
 import initTodoListUI from "./initTodoListUI";
 import genKey from "./utils/generate-key";
+import storage from "./storage";
 
 const listOfTodoLists = [
   { name: "Main", list: initTodoListUI(todoList()), key: genKey() },
@@ -8,15 +9,18 @@ const listOfTodoLists = [
 ];
 
 const UI = () => {
+  storage();
   const body = document.body;
 
+  const sideBarContainer = document.createElement("div");
   const sideBar = document.createElement("div");
   const sideBarList = document.createElement("div");
 
+  sideBarContainer.classList.add("sidebar-container");
   sideBar.classList.add("sidebar");
   sideBarList.classList.add("sidebar__list");
 
-  sideBar.textContent = "Do-Ya-Todo";
+  sideBar.textContent = "Viewtiful Todo";
 
   listOfTodoLists.forEach((e) => {
     const listItem = document.createElement("button");
@@ -394,10 +398,11 @@ const UI = () => {
     return sideBarListAddBtn;
   };
 
+  sideBarContainer.appendChild(sideBar);
   sideBar.appendChild(sideBarList);
   sideBar.appendChild(sideBarListAddBtn());
 
-  body.appendChild(sideBar);
+  body.appendChild(sideBarContainer);
   body.appendChild(listOfTodoLists[0].list);
 };
 
