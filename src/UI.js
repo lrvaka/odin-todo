@@ -1,7 +1,7 @@
 import todoList from "./todoList/todoList";
 import initTodoListUI from "./initTodoListUI";
 import genKey from "./utils/generate-key";
-import storage from "./storage";
+import Storage from "./storage";
 
 const listOfTodoLists = [
   { name: "Main", list: initTodoListUI(todoList()), key: genKey() },
@@ -9,7 +9,6 @@ const listOfTodoLists = [
 ];
 
 const UI = () => {
-  storage();
   const body = document.body;
 
   const sideBarContainer = document.createElement("div");
@@ -22,7 +21,8 @@ const UI = () => {
 
   sideBar.textContent = "Viewtiful Todo";
 
-  listOfTodoLists.forEach((e) => {
+  //initial Load Function for local storage
+  Storage.getTodoList().forEach((e) => {
     const listItem = document.createElement("button");
     const listItemName = document.createElement("input");
     const changeListName = document.createElement("button");
@@ -96,14 +96,14 @@ const UI = () => {
       const current = document.querySelector(".container");
       console.log(current);
       body.removeChild(current);
-      body.appendChild(e.list);
+      body.appendChild(initTodoListUI(todoList(e.list)));
     });
 
     changeListName.addEventListener("click", (e) => {
       e.stopPropagation();
       const target = e.target.closest(".sidebar__list-item-change");
       if (!target) return;
-      console.log(target);
+
       if (listItemName.disabled) {
         listItemName.disabled = false;
         changeListName.innerHTML = `<?xml version="1.0" encoding="iso-8859-1"?>
@@ -164,21 +164,20 @@ const UI = () => {
 
     listItemName.addEventListener("input", (event) => {
       const key = listItem.getAttribute("key");
-      listOfTodoLists.forEach((e, i) => {
+      Storage.getTodoList().forEach((e, i) => {
         if (e.key == key) {
           e.name = event.target.value;
-          console.log(listOfTodoLists);
+          Storage.updateTodoList();
         }
       });
     });
 
     deleteListItem.addEventListener("click", () => {
       const key = listItem.getAttribute("key");
-      listOfTodoLists.forEach((e, i) => {
+      Storage.getTodoList().forEach((e, i) => {
         if (e.key == key) {
-          listOfTodoLists.splice(i, 1);
+          Storage.removeTodoList(i);
           listItem.remove();
-          console.log(listOfTodoLists);
         }
       });
     });
@@ -195,11 +194,15 @@ const UI = () => {
       const key = genKey();
       const name = "Enter name";
       const list = initTodoListUI(todoList());
+      const todoListArray = todoList();
       listOfTodoLists.push({
         name,
         list,
         key,
       });
+      Storage.addTodoList({ name, list: todoListArray, key });
+
+      console.log(Storage.getTodoList());
       const listItem = document.createElement("button");
       const listItemName = document.createElement("input");
       const changeListName = document.createElement("button");
@@ -303,9 +306,8 @@ const UI = () => {
       listItem.appendChild(deleteListItem);
       listItem.addEventListener("click", () => {
         const current = document.querySelector(".container");
-        console.log(current);
         body.removeChild(current);
-        body.appendChild(list);
+        body.appendChild(initTodoListUI(todoList(todoListArray)));
       });
 
       changeListName.addEventListener("click", (e) => {
@@ -373,21 +375,20 @@ const UI = () => {
 
       listItemName.addEventListener("input", (event) => {
         const key = listItem.getAttribute("key");
-        listOfTodoLists.forEach((e, i) => {
+        Storage.getTodoList().forEach((e, i) => {
           if (e.key == key) {
             e.name = event.target.value;
-            console.log(listOfTodoLists);
+            Storage.updateTodoList();
           }
         });
       });
 
       deleteListItem.addEventListener("click", () => {
         const key = listItem.getAttribute("key");
-        listOfTodoLists.forEach((e, i) => {
+        Storage.getTodoList().forEach((e, i) => {
           if (e.key == key) {
-            listOfTodoLists.splice(i, 1);
+            Storage.removeTodoList(i);
             listItem.remove();
-            console.log(listOfTodoLists);
           }
         });
       });
@@ -403,7 +404,7 @@ const UI = () => {
   sideBar.appendChild(sideBarListAddBtn());
 
   body.appendChild(sideBarContainer);
-  body.appendChild(listOfTodoLists[0].list);
+  body.appendChild(initTodoListUI(todoList(Storage.getTodoList()[0])));
 };
 
 export default UI;

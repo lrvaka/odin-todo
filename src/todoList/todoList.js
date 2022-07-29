@@ -3,8 +3,8 @@ import {
   checklistTodoListItem,
 } from "./todoListItem/todoListItem";
 
-const todoList = () => {
-  const array = [];
+const todoList = (input) => {
+  const array = input || [];
   const proto = {
     add(element) {
       const type = (e) => {

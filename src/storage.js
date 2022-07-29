@@ -1,35 +1,40 @@
-const storage = () => {
-  const storageAvailable = () => {
-    let storage;
-    try {
-      storage = window[type];
-      const x = "__storage_test__";
-      storage.setItem(x, x);
-      storage.removeItem(x);
-      return true;
-    } catch (e) {
-      return (
-        e instanceof DOMException &&
-        // everything except Firefox
-        (e.code === 22 ||
-          // Firefox
-          e.code === 1014 ||
-          // test name field too, because code might not be present
-          // everything except Firefox
-          e.name === "QuotaExceededError" ||
-          // Firefox
-          e.name === "NS_ERROR_DOM_QUOTA_REACHED") &&
-        // acknowledge QuotaExceededError only if there's something already stored
-        storage &&
-        storage.length !== 0
-      );
-    }
-  };
-  if (storageAvailable("localStorage")) {
-    return console.log("Yipppy Cayay Mother fucker");
-  } else {
-    console.log("We don't like your kind round these parts");
-  }
-};
+const Storage = (() => {
+  const _main = JSON.parse(localStorage.getItem("todo-list")) || [];
 
-export default storage
+  const setTodoList = (item) => {
+    localStorage.setItem("todo-list", JSON.stringify(item));
+  };
+
+  const getTodoList = () => {
+    return _main;
+  };
+
+  const updateTodoList = () => {
+    setTodoList(_main);
+  };
+
+  const removeTodoList = (item) => {
+    _main.splice(item, 1);
+    setTodoList(_main);
+  };
+
+  const addTodoList = (item) => {
+    _main.push(item);
+    setTodoList(_main);
+  };
+
+  const addTodoItem = (item) => {
+    _main.push(item);
+    setTodoList(_main);
+  };
+
+  return {
+    addTodoList,
+    setTodoList,
+    getTodoList,
+    removeTodoList,
+    updateTodoList,
+  };
+})();
+
+export default Storage;
