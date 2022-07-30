@@ -2,6 +2,7 @@ import {
   todoListItem,
   checklistTodoListItem,
 } from "./todoListItem/todoListItem";
+import Storage from "../storage";
 
 const todoList = (input) => {
   const array = input || [];
@@ -16,11 +17,6 @@ const todoList = (input) => {
       };
       this.push(type(element));
     },
-    tick(element) {
-      //pass in some time of identifier?
-    },
-
-    delete() {},
   };
 
   Object.setPrototypeOf(proto, Array.prototype);

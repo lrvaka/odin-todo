@@ -1,4 +1,7 @@
+import Storage from "./storage";
+
 const initTodoListUI = (todoList) => {
+  console.log({ todoList });
   const addTodoButton = document.createElement("button");
   const container = document.createElement("div");
   const todoListDisplay = document.createElement("div");
@@ -14,6 +17,7 @@ const initTodoListUI = (todoList) => {
 
   const populateTodoListUI = (item) => {
     if (!item.title && !item.desc) return;
+    console.log(item);
 
     const todoItemChecklist = (checklist) => {
       const todoItemChecklistContainer = document.createElement("div");
@@ -67,6 +71,7 @@ const initTodoListUI = (todoList) => {
           checklist.forEach((e, i) => {
             if (e.key == current) {
               checklist.splice(i, 1);
+              Storage.updateTodoListItem(todoList);
             }
           });
           todoItemChecklist.removeChild(todoItemChecklistItem);
@@ -77,6 +82,7 @@ const initTodoListUI = (todoList) => {
           checklist.forEach((e, i) => {
             if (e.key == current) {
               checklist[i].item = todoItemChecklistItemDesc.value;
+              Storage.updateTodoListItem(todoList);
             }
           });
         });
@@ -87,6 +93,7 @@ const initTodoListUI = (todoList) => {
             checklist.forEach((e, i) => {
               if (e.key == current) {
                 checklist[i].completed = true;
+                Storage.updateTodoListItem(todoList);
                 todoItemChecklistItemDesc.classList.add("line-through");
               }
             });
@@ -94,6 +101,7 @@ const initTodoListUI = (todoList) => {
             checklist.forEach((e, i) => {
               if (e.key == current) {
                 checklist[i].completed = false;
+                Storage.updateTodoListItem(todoList);
                 todoItemChecklistItemDesc.classList.remove("line-through");
               }
             });
@@ -117,6 +125,7 @@ const initTodoListUI = (todoList) => {
           completed: false,
           key: result,
         });
+        Storage.updateTodoListItem(todoList);
 
         const todoItemChecklistItem = document.createElement("li");
         const todoItemChecklistItemCheck = document.createElement("input");
@@ -152,6 +161,7 @@ const initTodoListUI = (todoList) => {
           checklist.forEach((e, i) => {
             if (e.key == current) {
               checklist.splice(i, 1);
+              Storage.updateTodoListItem(todoList);
             }
           });
           todoItemChecklist.removeChild(todoItemChecklistItem);
@@ -162,6 +172,7 @@ const initTodoListUI = (todoList) => {
           checklist.forEach((e, i) => {
             if (e.key == current) {
               checklist[i].item = todoItemChecklistItemDesc.value;
+              Storage.updateTodoListItem(todoList);
             }
           });
         });
@@ -172,6 +183,7 @@ const initTodoListUI = (todoList) => {
             checklist.forEach((e, i) => {
               if (e.key == current) {
                 checklist[i].completed = true;
+                Storage.updateTodoListItem(todoList);
                 todoItemChecklistItemDesc.classList.add("line-through");
               }
             });
@@ -179,6 +191,7 @@ const initTodoListUI = (todoList) => {
             checklist.forEach((e, i) => {
               if (e.key == current) {
                 checklist[i].completed = false;
+                Storage.updateTodoListItem(todoList);
                 todoItemChecklistItemDesc.classList.remove("line-through");
               }
             });
@@ -250,7 +263,6 @@ const initTodoListUI = (todoList) => {
     </svg>
     `;
     todoItem.setAttribute("data-key", item.key);
-    console.log(item.key);
 
     if (item.type === "Checklist") {
       todoItem.classList.add("check");
@@ -275,18 +287,18 @@ const initTodoListUI = (todoList) => {
         todoList.forEach((e, i) => {
           if (e.key == current) {
             todoList[i].completed = true;
+            Storage.updateTodoListItem(todoList);
             todoItemTitle.classList.add("line-through");
             todoItemDesc.classList.add("line-through");
-            console.log(todoList);
           }
         });
       } else {
         todoList.forEach((e, i) => {
           if (e.key == current) {
             todoList[i].completed = false;
+            Storage.updateTodoListItem(todoList);
             todoItemTitle.classList.remove("line-through");
             todoItemDesc.classList.remove("line-through");
-            console.log(todoList);
           }
         });
       }
@@ -298,7 +310,7 @@ const initTodoListUI = (todoList) => {
       todoList.forEach((e, i) => {
         if (e.key == current) {
           todoList.splice(i, 1);
-          console.log(todoList);
+          Storage.updateTodoListItem(todoList);
         }
       });
     });
@@ -459,6 +471,7 @@ const initTodoListUI = (todoList) => {
           completed: e.childNodes[0].checked ? true : false,
           key: result,
         });
+        Storage.updateTodoListItem(todoList);
       });
 
       todoListEntry.add({
@@ -470,6 +483,7 @@ const initTodoListUI = (todoList) => {
         checklist: checklist,
         key: result,
       });
+      Storage.updateTodoList();
       addTodoButton.removeAttribute("disabled");
       addTodoForm.remove();
 
@@ -491,6 +505,14 @@ const initTodoListUI = (todoList) => {
 
     return addTodoForm;
   };
+
+  if (!todoList) {
+    console.log("Nah nothing here");
+  } else {
+    todoList.forEach((e) => {
+      populateTodoListUI(e);
+    });
+  }
 
   addTodoButton.addEventListener("click", (e) => {
     todoListDisplay.appendChild(addTodoFormUI(todoList));

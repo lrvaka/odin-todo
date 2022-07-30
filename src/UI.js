@@ -9,6 +9,15 @@ const listOfTodoLists = [
 ];
 
 const UI = () => {
+  if (!Storage.getTodoList()[0]) {
+    const key = genKey();
+    const name = "Main";
+    const list = [];
+
+    //add new todoList to local storage
+    Storage.addTodoList({ name, list, key });
+  }
+
   const body = document.body;
 
   const sideBarContainer = document.createElement("div");
@@ -94,9 +103,9 @@ const UI = () => {
 
     listItem.addEventListener("click", () => {
       const current = document.querySelector(".container");
-      console.log(current);
+
       body.removeChild(current);
-      body.appendChild(initTodoListUI(todoList(e.list)));
+      body.appendChild(initTodoListUI(todoList(e)));
     });
 
     changeListName.addEventListener("click", (e) => {
@@ -192,17 +201,11 @@ const UI = () => {
 
     sideBarListAddBtn.addEventListener("click", () => {
       const key = genKey();
-      const name = "Enter name";
-      const list = initTodoListUI(todoList());
-      const todoListArray = todoList();
-      listOfTodoLists.push({
-        name,
-        list,
-        key,
-      });
-      Storage.addTodoList({ name, list: todoListArray, key });
+      const newListItem = { name: "Enter name", list: [], key: key };
 
-      console.log(Storage.getTodoList());
+      //add new todoList to local storage
+      Storage.addTodoList(newListItem);
+
       const listItem = document.createElement("button");
       const listItemName = document.createElement("input");
       const changeListName = document.createElement("button");
@@ -299,7 +302,7 @@ const UI = () => {
       </svg>
       `;
 
-      listItemName.placeholder = name;
+      listItemName.placeholder = "Enter name";
       listItem.setAttribute("key", key);
       listItem.appendChild(listItemName);
       listItem.appendChild(changeListName);
@@ -307,14 +310,14 @@ const UI = () => {
       listItem.addEventListener("click", () => {
         const current = document.querySelector(".container");
         body.removeChild(current);
-        body.appendChild(initTodoListUI(todoList(todoListArray)));
+        body.appendChild(initTodoListUI(todoList(newListItem)));
       });
 
       changeListName.addEventListener("click", (e) => {
         e.stopPropagation();
         const target = e.target.closest(".sidebar__list-item-change");
         if (!target) return;
-        console.log(target);
+
         if (listItemName.disabled) {
           listItemName.disabled = false;
           changeListName.innerHTML = `<?xml version="1.0" encoding="iso-8859-1"?>
@@ -404,6 +407,7 @@ const UI = () => {
   sideBar.appendChild(sideBarListAddBtn());
 
   body.appendChild(sideBarContainer);
+
   body.appendChild(initTodoListUI(todoList(Storage.getTodoList()[0])));
 };
 
