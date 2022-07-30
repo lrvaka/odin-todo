@@ -264,6 +264,12 @@ const initTodoListUI = (todoList) => {
     `;
     todoItem.setAttribute("data-key", item.key);
 
+    if (item.completed) {
+      todoItemCompleteBtn.setAttribute("checked", "");
+      todoItemTitle.classList.add("line-through");
+      todoItemDesc.classList.add("line-through");
+    }
+
     if (item.type === "Checklist") {
       todoItem.classList.add("check");
       todoItemTitle.className = "check-title";
