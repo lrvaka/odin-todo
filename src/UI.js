@@ -176,12 +176,16 @@ const UI = () => {
       });
     });
 
-    deleteListItem.addEventListener("click", () => {
+    deleteListItem.addEventListener("click", (e) => {
+      e.stopPropagation();
       const key = listItem.getAttribute("key");
+      const current = document.querySelector(".container");
       Storage.getTodoList().forEach((e, i) => {
         if (e.key == key) {
           Storage.removeTodoList(i);
           listItem.remove();
+          body.removeChild(current);
+          body.appendChild(initTodoListUI(todoList(firstItem)));
         }
       });
     });
@@ -381,7 +385,8 @@ const UI = () => {
         });
       });
 
-      deleteListItem.addEventListener("click", () => {
+      deleteListItem.addEventListener("click", (e) => {
+        e.stopPropagation();
         const key = listItem.getAttribute("key");
         const current = document.querySelector(".container");
 
