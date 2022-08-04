@@ -1,5 +1,7 @@
 # Odin-Project Todo List Project
 
+[Live URL](https://lrvaka.github.io/odin-todo/)
+
 ## Features
 - Saved todo lists via localStorage API
 - Full CRUD capabilities
