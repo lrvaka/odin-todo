@@ -3,19 +3,13 @@ import initTodoListUI from "./initTodoListUI";
 import genKey from "./utils/generate-key";
 import Storage from "./storage";
 
-const listOfTodoLists = [
-  { name: "Main", list: initTodoListUI(todoList()), key: genKey() },
-  { name: "Secondary", list: initTodoListUI(todoList()), key: genKey() },
-];
-
 const UI = () => {
   if (!Storage.getTodoList()[0]) {
     const key = genKey();
     const name = "Main";
-    const list = [];
 
     //add new todoList to local storage
-    Storage.addTodoList({ name, list, key });
+    Storage.addTodoList({ name, key });
   }
 
   const body = document.body;
@@ -201,7 +195,7 @@ const UI = () => {
 
     sideBarListAddBtn.addEventListener("click", () => {
       const key = genKey();
-      const newListItem = { name: "Enter name", list: [], key: key };
+      const newListItem = { name: "Enter name", key: key };
 
       //add new todoList to local storage
       Storage.addTodoList(newListItem);
@@ -392,6 +386,9 @@ const UI = () => {
           if (e.key == key) {
             Storage.removeTodoList(i);
             listItem.remove();
+            body.appendChild(
+              initTodoListUI(todoList(Storage.getTodoList()[0]))
+            );
           }
         });
       });

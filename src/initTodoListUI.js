@@ -1,7 +1,6 @@
 import Storage from "./storage";
 
 const initTodoListUI = (todoList) => {
-  console.log({ todoList });
   const addTodoButton = document.createElement("button");
   const container = document.createElement("div");
   const todoListDisplay = document.createElement("div");
@@ -17,7 +16,6 @@ const initTodoListUI = (todoList) => {
 
   const populateTodoListUI = (item) => {
     if (!item.title && !item.desc) return;
-    console.log(item);
 
     const todoItemChecklist = (checklist) => {
       const todoItemChecklistContainer = document.createElement("div");

@@ -19,9 +19,7 @@ const Storage = (() => {
   const updateTodoListItem = (list) => {
     _main.forEach((e, i) => {
       if (e.key == list.key) {
-        console.log(list);
         _main.splice(i, 1, list);
-        console.log(_main);
         updateTodoList();
       }
     });
