@@ -11,6 +11,7 @@ const UI = () => {
     //add new todoList to local storage
     Storage.addTodoList({ name, key });
   }
+  const firstItem = Storage.getTodoList()[0];
 
   const body = document.body;
 
@@ -382,13 +383,14 @@ const UI = () => {
 
       deleteListItem.addEventListener("click", () => {
         const key = listItem.getAttribute("key");
+        const current = document.querySelector(".container");
+
         Storage.getTodoList().forEach((e, i) => {
           if (e.key == key) {
             Storage.removeTodoList(i);
             listItem.remove();
-            body.appendChild(
-              initTodoListUI(todoList(Storage.getTodoList()[0]))
-            );
+            body.removeChild(current);
+            body.appendChild(initTodoListUI(todoList(firstItem)));
           }
         });
       });
@@ -405,7 +407,7 @@ const UI = () => {
 
   body.appendChild(sideBarContainer);
 
-  body.appendChild(initTodoListUI(todoList(Storage.getTodoList()[0])));
+  body.appendChild(initTodoListUI(todoList(firstItem)));
 };
 
 export default UI;
